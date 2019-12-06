@@ -175,10 +175,9 @@ class Heap():
         return False
   
   
-def printArr(dist, n): 
+def printArr(dist, n, i): 
     print("Vertex\tDistance from source")
-    for i in range(n): 
-        print("%d\t\t%d" % (i,dist[i]) )
+    print("%d\t\t%d" % (i,dist[i]-2) )
   
   
 class Graph(): 
@@ -206,7 +205,7 @@ class Graph():
     # The main function that calulates distances  
     # of shortest paths from src to all vertices.  
     # It is a O(ELogV) function 
-    def dijkstra(self, src): 
+    def dijkstra(self, src, k): 
   
         V = self.V  # Get the number of vertices in graph 
         dist = []   # dist values used to pick minimum  
@@ -255,8 +254,8 @@ class Graph():
                         # update distance value  
                         # in min heap also 
                         minHeap.decreaseKey(v, dist[v]) 
-  
-        printArr(dist,V) 
+
+        printArr(dist,V,k) 
   
   
 # Driver program to test the above functions 
@@ -267,6 +266,6 @@ for orbit in input:
     tempplanets=orbit.split(")")
     graph.addEdge(planets.index(tempplanets[0]),planets.index(tempplanets[1]),1)
 
-graph.dijkstra(planets.index("SAN"))
+graph.dijkstra(planets.index("SAN"), planets.index("YOU"))
 
 # The Djikstra code is contributed by Divyanshu Mehta, Thank you very much 
