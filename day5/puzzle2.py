@@ -31,6 +31,11 @@ def memory(liste):
     index=0
     
     while True:
+
+        if liste[index]==99:
+            print(liste)
+            break
+
         if (liste[index]%1000)//100>0:
             arg1 = index+1
         else:
