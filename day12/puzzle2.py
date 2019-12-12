@@ -1,15 +1,13 @@
 import itertools
+import numpy as np
 
-input_file = open("C:/Users/Pierre/Documents/AdventCode2019/inputs/day12.txt", "r")
+input_file = open("inputs/day12.txt", "r")
 input_pos_temp = input_file.read().splitlines()
 
-steps_pos_x = []
-steps_pos_y = []
-steps_pos_z = []
-steps_vel_x = []
-steps_vel_y = []
-steps_vel_z = []
-periods = [0 for _ in range(6)]
+steps_x = []
+steps_y = []
+steps_z = []
+periods=[0,0,0]
 
 positions = [[0,0,0] for _ in range(4)]
 
@@ -20,6 +18,12 @@ for k,object_jupiter in enumerate(input_pos_temp):
     positions[k] = [int(temp_positions[0][1]),int(temp_positions[1][1]),int(temp_positions[2][1])]
 
 velocities = [[0,0,0] for _ in range(4)]
+
+
+init_x = [positions[0][0],positions[1][0],positions[2][0],positions[3][0],velocities[0][0],velocities[1][0],velocities[2][0],velocities[3][0]]
+init_y = [positions[0][1],positions[1][1],positions[2][1],positions[3][1],velocities[0][1],velocities[1][1],velocities[2][1],velocities[3][1]]
+init_z = [positions[0][2],positions[1][2],positions[2][2],positions[3][2],velocities[0][2],velocities[1][2],velocities[2][2],velocities[3][2]]
+
 NB_STEPS = 500000000
 
 def apply_gravity(positions, velocities):
@@ -50,43 +54,47 @@ def energy(positions, velocities):
         ener += temp[0]*temp[1]
     return ener
 
-for k in range(NB_STEPS):        
-    steps_vel_x += [velocities[0].copy()]
-    steps_vel_y += [velocities[1].copy()]
-    steps_vel_z += [velocities[2].copy()]    
-    steps_pos_x += [positions[0].copy()]
-    steps_pos_y += [positions[1].copy()]
-    steps_pos_z += [positions[2].copy()]
+k = 0
 
-    apply_gravity(positions, velocities)
-    apply_velocity(positions,velocities)
+while(0 in periods):
 
-    if velocities[0] in steps_vel_x[-1]:
-        print(k)
-        if periods[0]==0:
+    k += 1
+
+    apply_gravity(positions,velocities)
+    apply_velocity(positions, velocities)
+
+    if periods[0] == 0:
+        steps_x += [[positions[0][0], positions[1][0],positions[2][0],positions[3][0],velocities[0][0], velocities[1][0],velocities[2][0],velocities[3][0]]].copy()
+    if periods[1] == 0:
+        steps_y += [[positions[0][1], positions[1][1],positions[2][1],positions[3][1],velocities[0][1], velocities[1][1],velocities[2][1],velocities[3][1]]].copy()
+    if periods[2] == 0:
+        steps_z += [[positions[0][2], positions[1][2],positions[2][2],positions[3][2],velocities[0][2], velocities[1][2],velocities[2][2],velocities[3][2]]].copy()
+
+    if [positions[0][0], positions[1][0],positions[2][0],positions[3][0],velocities[0][0], velocities[1][0],velocities[2][0],velocities[3][0]] == init_x:
+        if periods[0] == 0:
             periods[0] = k
-    if velocities[1] in steps_vel_y[-1]:
-        print(k)
-        if periods[1]==0:
+            print(k, periods)
+
+    if [positions[0][1], positions[1][1],positions[2][1],positions[3][1],velocities[0][1], velocities[1][1],velocities[2][1],velocities[3][1]] == init_y:
+        if periods[1] == 0:
             periods[1] = k
-    if velocities[2] in steps_vel_z[-1]:
-        print(k)
-        if periods[2]==0:
+            print(k, periods)
+
+    if [positions[0][2], positions[1][2],positions[2][2],positions[3][2],velocities[0][2], velocities[1][2],velocities[2][2],velocities[3][2]] == init_z:
+        if periods[2] == 0:
             periods[2] = k
-    if positions[0] in steps_pos_x[-1]:
-        print(k)
-        if periods[3]==0:
-            periods[3] = k
-    if positions[1] in steps_pos_y[-1]:
-        print(k)
-        if periods[4]==0:
-            periods[4] = k
-    if positions[2] in steps_pos_z[-1]:
-        print(k)
-        if periods[5]==0:
-            periods[5] = k
-    print(k)
-    print(periods)
+            print(k, periods)
+
+
+    
+
+    # print(steps_x)
+
 
 print(positions,velocities)
-print(energy(positions,velocities))
+print(k)
+
+
+      
+print(np.lcm(np.lcm(periods[0],periods[1]), periods[2])) 
+  
